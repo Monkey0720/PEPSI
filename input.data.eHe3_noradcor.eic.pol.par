@@ -1,0 +1,69 @@
+pepsi.eHe.5x166.12-5Mevents.pol-par.RadCor=0.txt  ! output file name
+11                     ! lepton and hadron beam type
+166., 5.               ! proton and electron beam energy
+5000000,100            ! Number of events 
+1e-07 1.00             ! xmin and xmax
+1e-09,0.99             ! ymin and ymax 
+1.0,20000.             ! Q2min and Q2max 
+ALLM, 1998             ! F2-Model, R-Parametrisation
+0                      ! switch for rad corrections; 0:no, 1:yes, 2:gen.lookup table
+10.,20000.              ! W2min and W2max 
+1.,20000.              ! numin and numax 
+1, 1                  ! Beam and target polarisation direction: +1 -1
+L, L                   ! Beam and target polarisation: beam: L, target: L, T, DT
+LST 1 1    ! choice of generation variables !--- Start of LEPTO/PEPSI switches
+LST 2 1    ! generation and cut scheme
+LST 3 5    ! printing of errors and info
+LST 4 1    ! info to include in event record
+LST 5 3    ! choice of frame
+LST 6 1    ! phi of lepton scattering plane
+LST 7 1    ! completeness of MC simulation
+LST 8 1    ! simulation of QCD effects in hadronic final state
+LST 9 5    ! scale in parton showers
+LST 10 1    ! numerical integration of xsec in LINIT
+LST 11 0    ! inclusion of F_L, target mass, and higher twist; NOTE: 11=1 not possible in polarized case
+LST 12 4    ! max number of sea quark flavours 
+LST 13 5    ! heaviest quark flavour allowed in boson-gluon fusion
+LST 14 4    ! treatment of target remnant
+LST 15 144  ! parton distribution function 
+LST 16 1  
+LST 17 0    ! energy variation of initial particles from event to event
+LST 18 2    ! running of EM coupling alpha, and choice of W,Z masses
+LST 19 -10  ! use of grid to store probabilities for qg and qqbar
+LST 20 5    ! scheme for cutoffs against divergences
+LST 23 1    ! simulated process: g, W+-, Z0, g/Z0
+LST 34 2    ! switch for soft colour interaction
+LST 35 1    ! turn on/off new sea quark treatment
+PARL 1 3    !  target A & Z    
+PARL 2 2
+PARL 3 0.40    ! Gaussian width of primordial k_t
+PARL 4 0.75    ! probability that a ud-diquark in remnant has I=S=0
+PARL 5 0.2294  ! sin (theta_W) (D: 0.2319) (see below PARU(102)!)
+PARL 6 0.25    ! beam polarization = 1-2P_L = 2P_R-1, P_L, R = prob of L,R-handed helicity
+PARL 7 0.5     ! probability for soft colour interaction between parton pairs
+PARL 8 0.04    ! cutoffs against divergencies in first order QCD ME HERMES:0.005
+PARL 9 4.0     ! HERMES:1.0
+PARL 10 0.40   ! width of Gaussian distribution for the virtuality of sea quarks
+PARL 11 0.01   ! required relative accuracy for 1d-integrations (ME and longitudinal SF)
+PARL 12 0.     ! probability for an intrinsic charm quark-antiquark pair in proton
+PARL 13 0.1    ! internal parameter foradjustment of y_cut for integration of QCD ME
+PARL 14 0.35   ! width of Gaussian distribution in transverse momentum, when a non-trivial target remnant is split into two particles, cf LST 27)
+PARL 15 0.01   ! required relative accuracy for 2d integration of cross section
+PARJ 1 0.100   ! Now come all the switches for Jetset
+PARJ 2 0.300
+PARJ 11 0.5
+PARJ 12 0.6
+PARJ 21  0.40
+PARJ 32 1.0
+PARJ 33  0.80
+PARJ 41  0.30
+PARJ 42  0.58
+PARJ 45  0.5
+MSTJ 1 1
+MSTJ 12 1
+MSTJ 45 5
+MSTU 16 1  ! =2 gives the history of the string to the struck quark
+MSTU 112 5
+MSTU 113 5
+MSTU 114 5
+PARU 102 0.2294 ! sync sin(theta_W) with LEPTO PARU(102) = PARL(5)
