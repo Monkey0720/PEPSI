@@ -45,12 +45,13 @@ pepsieRHICnoRAD: pepsiMaineRHIC_noradcorr.o pepsi_radgen_extras.o gmc_random.o $
 	@echo 
 	@echo LINKING
 	$(myfortran) $(fopts) $^ -L/cern64/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm -o $@
-	$(myfortran) $(fopts) $^ -L$(PEPSIDIR) -lPepsi -L/cern64/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm -o $@
+#	$(myfortran) $(fopts) $^ -L$(PEPSIDIR) -lPepsi -L/cern64/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm -o $@
 
 pepsieRHICwithRAD: pepsiMaineRHIC_radcorr.v2.o pepsi_radgen_extras.o radgen.o radgen_event.o radgen_init.o gmc_random.o  $(PEPSIDIR)/libPepsi.a
 	@echo 
 	@echo LINKING
-	$(myfortran) $(fopts) $^ -L$(PEPSIDIR) -lPepsi -L/cern64/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm -o $@
+	$(myfortran) $(fopts) $^ -L/cern64/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm -o $@
+#	$(myfortran) $(fopts) $^ -L$(PEPSIDIR) -lPepsi -L/cern64/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm -o $@
 
 clean :
 	@echo 
