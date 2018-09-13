@@ -1,25 +1,65 @@
-pepsi: gfortran -g -m32 -fno-inline -fno-automatic -Wall -I/afs/rhic.bnl.gov/eic/PACKAGES/PEPSI/include -c pepsi/*.F
+## Compiler
+myfortran 	= gfortran
 
-gmc_random.o: gmc_random.f
-	gfortran -g -m32 -fno-inline -fno-automatic -Wall -I/afs/rhic.bnl.gov/eic/PACKAGES/PEPSI/include -c gmc_random.f
-pepsiMaineRHIC_noradcorr.o: pepsiMaineRHIC_noradcorr.f
-	gfortran -g -m32 -fno-inline -fno-automatic -Wall -I/afs/rhic.bnl.gov/eic/PACKAGES/PEPSI/include -c pepsiMaineRHIC_noradcorr.f
-pepsiMaineRHIC_radcorr.v2.o: pepsiMaineRHIC_radcorr.v2.f
-	gfortran -g -m32 -fno-inline -fno-automatic -Wall -I/afs/rhic.bnl.gov/eic/PACKAGES/PEPSI/include -c pepsiMaineRHIC_radcorr.v2.f
+## Compile flags
+# fopts 		= -g -m32 -fno-inline -fno-automatic -Wall 
+fopts 		= -g -m64  
 
-pepsi_radgen_extras.: pepsi_radgen_extras.f
-	gfortran -g -m32 -fno-inline -fno-automatic -Wall -I/afs/rhic.bnl.gov/eic/PACKAGES/PEPSI/include -c pepsi_radgen_extras.f
-radgen_event.o: radgen_event.f
-	gfortran -g -m32 -fno-inline -fno-automatic -Wall -I/afs/rhic.bnl.gov/eic/PACKAGES/PEPSI/include -c radgen_event.f  
-radgen.o: radgen.f
-	gfortran -g -m32 -fno-inline -fno-automatic -Wall -I/afs/rhic.bnl.gov/eic/PACKAGES/PEPSI/include -c radgen.f
-radgen_init.o: radgen_init.f
-	gfortran -g -m32 -fno-inline -fno-automatic -Wall -I/afs/rhic.bnl.gov/eic/PACKAGES/PEPSI/include -c radgen_init.f
-pepsieRHICnoRAD: pepsieRHICnoRAD
-	gfortran -g -m32 -fno-inline -fno-automatic -I/afs/rhic.bnl.gov/eic/PACKAGES/PEPSI/include -o pepsieRHICnoRAD pepsi/*.o pepsi_radgen_extras.o gmc_random.o pepsiMaineRHIC_noradcorr.o  -L/cern/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm
+PEPSIDIR	= pepsi
+INCDIR		= include
+INCS		= $(INCDIR)/$(wildcard *.inc)
 
-pepsieRHICwithRAD: pepsieRHICwithRAD
-	gfortran -g -m32 -fno-inline -fno-automatic -I/afs/rhic.bnl.gov/eic/PACKAGES/PEPSI/include -o pepsieRHICwithRAD pepsi/*.o pepsi_radgen_extras.o radgen.o radgen_event.o radgen_init.o gmc_random.o pepsiMaineRHIC_radcorr.v2.o  -L/cern/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm
+###############################################################################
+# Rules
 
-clean:
-	rm *.o; o; rm pepsieRHIC*
+# Default targets (have to come first.....
+all: pepsieRHICnoRAD pepsieRHICwithRAD
+
+# PEPSI objects ###
+pepsisrc	= $(wildcard $(PEPSIDIR)/*.F)
+pepsiobj	= $(pepsisrc:.F=.o)
+
+$(PEPSIDIR)/%.o : $(PEPSIDIR)/%.F $(INCS)
+	@echo 
+	@echo COMPILING
+	$(myfortran) $(fopts) -I$(INCDIR) -c $< -o $@
+
+$(PEPSIDIR)/libPepsi.a : $(pepsiobj)
+	@echo 
+	@echo MAKING LIBRARY
+	ar rcf $@ $^
+
+# Top level objects ###
+%.o : ./%.f $(INCS)
+	@echo 
+	@echo COMPILING
+	$(myfortran) $(fopts) -I$(INCDIR) -c $< -o $@
+
+%.o : ./%.F $(INCS)
+	@echo 
+	@echo COMPILING
+	$(myfortran) $(fopts) -I$(INCDIR) -c $< -o $@
+
+# Executables ###
+pepsieRHICnoRAD: pepsiMaineRHIC_noradcorr.o pepsi_radgen_extras.o gmc_random.o $(PEPSIDIR)/libPepsi.a
+	@echo 
+	@echo LINKING
+	$(myfortran) $(fopts) $^ -L/cern64/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm -o $@
+	$(myfortran) $(fopts) $^ -L$(PEPSIDIR) -lPepsi -L/cern64/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm -o $@
+
+pepsieRHICwithRAD: pepsiMaineRHIC_radcorr.v2.o pepsi_radgen_extras.o radgen.o radgen_event.o radgen_init.o gmc_random.o  $(PEPSIDIR)/libPepsi.a
+	@echo 
+	@echo LINKING
+	$(myfortran) $(fopts) $^ -L$(PEPSIDIR) -lPepsi -L/cern64/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm -o $@
+
+clean :
+	@echo 
+	@echo CLEANING
+	rm -vf ./$(PEPSIDIR)/*.o
+	rm -vf ./$(PEPSIDIR)/lib*.a
+	rm -vf ./*.o
+	rm -vf pepsieRHIC*
+
+
+.PHONY : clean all
+
