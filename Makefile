@@ -53,6 +53,10 @@ pepsieRHICwithRAD: pepsiMaineRHIC_radcorr.v2.o pepsi_radgen_extras.o radgen.o ra
 	$(myfortran) $(fopts) $^ -L/cern64/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm -o $@
 #	$(myfortran) $(fopts) $^ -L$(PEPSIDIR) -lPepsi -L/cern64/pro/lib -lpdflib804 -lmathlib -lkernlib -lpacklib_noshift -ldl -lm -o $@
 
+install: pepsieRHICwithRAD pepsieRHICnoRAD 
+	@echo INSTALLING
+	cp -v $^ $(EICDIRECTORY)/bin
+
 clean :
 	@echo 
 	@echo CLEANING
@@ -61,6 +65,5 @@ clean :
 	rm -vf ./*.o
 	rm -vf pepsieRHIC*
 
-
-.PHONY : clean all
+.PHONY : clean all install
 
