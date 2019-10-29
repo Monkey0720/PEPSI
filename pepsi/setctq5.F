@@ -3,7 +3,7 @@
       Implicit Double Precision (A-H,O-Z)
       include "pepadm.inc"
       Parameter (Isetmax=9)
-      Character Flnm(Isetmax)*16, Tablefile*40
+      Character Flnm(Isetmax)*100, Tablefile*40
       Data (Flnm(I), I=1,Isetmax)
      > / './pdf/cteq5m.tbl','./pdf/cteq5d.tbl','./pdf/cteq5l.tbl', 
      >   './pdf/cteq5hj.tbl',
